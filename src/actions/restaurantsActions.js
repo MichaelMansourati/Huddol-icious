@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 import { FETCH_RESTAURANTS } from './types'
 
 export const fetchRestaurants = () => dispatch => {
@@ -11,11 +10,11 @@ export const fetchRestaurants = () => dispatch => {
       payload: response.data
     })
   })
-  // .catch(error => {
-  //   if (error.response) {
-  //     console.log("error.response: ", error.response)
-  //   } else {
-  //     console.log("error: ", error)
-  //   }
-  // })
+  .catch(error => {
+    if (error.response) {
+      console.log("error.response: ", error.response)
+    } else {
+      console.log("error: ", error)
+    }
+  })
 }
