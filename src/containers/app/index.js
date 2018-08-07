@@ -6,9 +6,9 @@ import MyOrders from '../MyOrders'
 const App = () => (
   <div>
     <header>
-      <Link to="/">Resaturants</Link>
+      <Link to="/">Restaurants</Link>
       <span> || </span>
-      <Link to="/my-orders">MY Orders</Link>
+      <Link to="/my-orders">My Orders</Link>
     </header>
 
     <main>
