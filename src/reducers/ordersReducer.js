@@ -1,7 +1,8 @@
-import { ADD_ITEM_TO_ORDER, REMOVE_ITEM_FROM_ORDER } from '../actions/types.js'
+import { ADD_ITEM_TO_ORDER, REMOVE_ITEM_FROM_ORDER, SUBMIT_ORDER } from '../actions/types.js'
 
 const initialState = {
-  orders: []
+  currentOrder: [],
+  pastOrders: []
 }
 
 export default (state = initialState, action) => {
@@ -10,21 +11,21 @@ export default (state = initialState, action) => {
     let ap = action.payload
     let name = action.payload.name
     let price = ap.price
-    let ordersArr = ap.state.orders.orders
-    let orderExistsIndex = ordersArr.map(o => o.name).indexOf(name)
+    let currentOrderArr = ap.state.orders.currentOrder
+    let itemExistsIndex = currentOrderArr.map(o => o.name).indexOf(name)
 
-      if (orderExistsIndex === -1) {
-        console.log('order exists', orderExistsIndex)
+      if (itemExistsIndex === -1) {
+        console.log('order exists', itemExistsIndex)
         return {
           ...state,
-          orders: [...ordersArr, {name, price, quantity: 1}]
+          currentOrder: [...currentOrderArr, {name, price, quantity: 1}]
         }
-      } else if (orderExistsIndex > -1) {
-        const ordersArrClone = ordersArr.slice(0)
-        ordersArrClone[orderExistsIndex].quantity++
+      } else if (itemExistsIndex > -1) {
+        const currentOrderArrClone = currentOrderArr.slice(0)
+        currentOrderArrClone[itemExistsIndex].quantity++
         return {
           ...state,
-          orders: ordersArrClone
+          currentOrder: currentOrderArrClone
         }
       } else {
         return state
@@ -34,24 +35,35 @@ export default (state = initialState, action) => {
       ap = action.payload
       name = action.payload.name
       price = ap.price
-      ordersArr = ap.state.orders.orders
-      orderExistsIndex = ordersArr.map(o => o.name).indexOf(name)
+      currentOrderArr = ap.state.orders.currentOrder
+      itemExistsIndex = currentOrderArr.map(o => o.name).indexOf(name)
 
-      if (orderExistsIndex === -1) {
+      if (itemExistsIndex === -1) {
         return state
-      } else if (orderExistsIndex > -1) {
-        const ordersArrClone = ordersArr.slice(0)
-        if(ordersArrClone[orderExistsIndex].quantity === 1) {
-          ordersArrClone.splice(orderExistsIndex, 1)
-        } else if (ordersArrClone[orderExistsIndex].quantity > 1) {
-          ordersArrClone[orderExistsIndex].quantity--
+      } else if (itemExistsIndex > -1) {
+        const currentOrderArrClone = currentOrderArr.slice(0)
+        if(currentOrderArrClone[itemExistsIndex].quantity === 1) {
+          currentOrderArrClone.splice(itemExistsIndex, 1)
+        } else if (currentOrderArrClone[itemExistsIndex].quantity > 1) {
+          currentOrderArrClone[itemExistsIndex].quantity--
         }
         return {
           ...state,
-          orders: ordersArrClone
+          currentOrder: currentOrderArrClone
         }
       }
 
+    case SUBMIT_ORDER:
+      ap = action.payload
+      currentOrderArr = ap.state.orders.currentOrder
+      const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      let pastOrdersArr = ap.state.orders.pastOrders
+      console.log("pastOrdersArr", pastOrdersArr)
+      return {
+        ...state,
+        pastOrders: [...pastOrdersArr, {id, order: currentOrderArr}],
+        currentOrder: []
+      }
     default:
       return state
   }

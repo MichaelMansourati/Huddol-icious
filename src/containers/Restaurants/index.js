@@ -4,7 +4,7 @@ import { push } from 'connected-react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { fetchRestaurants } from '../../actions/restaurantsActions'
-import { addItemToOrder, removeItemFromOrder } from '../../actions/ordersActions'
+import { addItemToOrder, removeItemFromOrder, submitOrder } from '../../actions/ordersActions'
 
 class Restaurants extends Component {
   componentDidMount() {
@@ -13,12 +13,16 @@ class Restaurants extends Component {
 
 
   render() {
-    console.log("this.props", this.props)
-    const currentOrders = this.props.orders.map(item => {
+    //console.log("this.props", this.props)
+    const currentOrder = this.props.currentOrder.map(item => {
       return(
-        <li>{item.name} - ${item.price} x {item.quantity}</li>
+        <li key={item.name}>{item.name} - ${item.price} x {item.quantity}</li>
       )
     })
+    const finalPrice = this.props.currentOrder.map(item => {
+      return item.price*item.quantity
+    }).reduce((a, b) => a + b, 0)
+    console.log(finalPrice)
     //async
     const restaurantsList = this.props.restaurants ? this.props.restaurants.map(restaurant => {
       return(
@@ -52,8 +56,10 @@ class Restaurants extends Component {
         </ul>
         <h2>Current Order</h2>
         <ul>
-          {currentOrders}
+          {currentOrder}
         </ul>
+        <p>${finalPrice}</p>
+        <button onClick={() => this.props.submitOrder(this.props.currentOrder)}>submit order</button>
       </div>
     )
   }
@@ -66,12 +72,14 @@ Restaurants.propTypes = {
 
 const mapStateToProps = state => ({
   restaurants: state.restaurants.items,
-  orders: state.orders.orders
+  currentOrder: state.orders.currentOrder,
+  pastOrders: state.orders.pastOrders
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   removeItemFromOrder: (item, price) => removeItemFromOrder(item, price),
   addItemToOrder: (item, price) => addItemToOrder(item, price),
+  submitOrder: () => submitOrder(),
   fetchRestaurants: () => fetchRestaurants(),
   changePage: () => push('/my-orders')
 }, dispatch)
