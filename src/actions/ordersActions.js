@@ -1,4 +1,10 @@
-import { ADD_ITEM_TO_ORDER, REMOVE_ITEM_FROM_ORDER, SUBMIT_ORDER } from './types'
+import {
+  ADD_ITEM_TO_ORDER,
+  REMOVE_ITEM_FROM_ORDER,
+  SUBMIT_ORDER,
+  ADD_ITEM_TO_PAST_ORDER,
+  REMOVE_ITEM_FROM_PAST_ORDER
+} from './types'
 
 export const addItemToOrder = (name, price) => (dispatch, getState)=> {
   const state = getState()
@@ -18,9 +24,24 @@ export const removeItemFromOrder = (name, price) => (dispatch, getState) => {
 
 export const submitOrder = (currentOrder) => (dispatch, getState) => {
   const state = getState()
-  console.log("currentOrder: ", currentOrder)
   dispatch({
     type: SUBMIT_ORDER,
     payload: {state}
+  })
+}
+
+export const addItemToPastOrder = (name, price, orderId) => (dispatch, getState) => {
+  const state = getState()
+  dispatch({
+    type: ADD_ITEM_TO_PAST_ORDER,
+    payload: {name, price, state, orderId}
+  })
+}
+
+export const removeItemFromPastOrder = (name, price, orderId) => (dispatch, getState) => {
+  const state = getState()
+  dispatch({
+    type: REMOVE_ITEM_FROM_PAST_ORDER,
+    payload: {name, price, state, orderId}
   })
 }

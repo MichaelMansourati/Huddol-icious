@@ -10,11 +10,4 @@ export const fetchRestaurants = () => dispatch => {
       payload: response.data
     })
   })
-  .catch(error => {
-    if (error.response) {
-      console.log("error.response: ", error.response)
-    } else {
-      console.log("error: ", error)
-    }
-  })
 }

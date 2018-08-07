@@ -13,7 +13,6 @@ class Restaurants extends Component {
 
 
   render() {
-    //console.log("this.props", this.props)
     const currentOrder = this.props.currentOrder.map(item => {
       return(
         <li key={item.name}>{item.name} - ${item.price} x {item.quantity}</li>
@@ -22,7 +21,6 @@ class Restaurants extends Component {
     const finalPrice = this.props.currentOrder.map(item => {
       return item.price*item.quantity
     }).reduce((a, b) => a + b, 0)
-    console.log(finalPrice)
     //async
     const restaurantsList = this.props.restaurants ? this.props.restaurants.map(restaurant => {
       return(
